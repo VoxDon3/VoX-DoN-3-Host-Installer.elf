@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+  لماذا هذه الصفحة؟
+  هذه الواجهةُ هي وجهُ الهوستِ الذي يركضُ فوقَ جهازِكَ. الزرُّ فيها
+  ليسَ مجرَّدَ رابطٍ: هوَ مفاتيحُ العبورِ فوقَ الجِلدِ.
+  عندَ الضغطِ يجري العملُ ذاتياً فوقَ الواجهةِ نفسِها، وعندَ النجاحِ
+  تُرسَلُ الحمولةُ تلقائياً ثمَّ تُخفى الواجهةُ ليَستلمَ Payload Managerُ الشاشةَ.
+-->
+<html lang="en" manifest="cache.appcache">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>VoX DoN 3 Host</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body class="landing">
+  <div class="bg-main"></div>
+  <div class="ui">
+    <header class="top">
+      <h1>VoX DoN 3 Host</h1>
+      <p>Firmware: <span id="current-fw">Not detected</span></p>
+      <p id="cache-status"></p>
+    </header>
+    <div class="mid"></div>
+    <!--
+        لماذا هذا الزرّ:
+        زرٌّ واحدٌ، مباشرٌ، فوقَ واجهةِ الهوستِ. لا صفحةَ وسيطةٍ، لا مؤقِّتَ،
+        لا progressٍ. عندَ الضغطِ يمرُّ السلوبكيتُ فوقَ الواجهةِ ذاتِها،
+        وعندَ النجاحِ تُرسَلُ الحمولةُ (pldmgr_v0.5.0.elf) ذاتياً فوقَها،
+        ثمَّ تُخفى الواجهةُ ليَستلمَ Payload Managerُ الشاشةَ كاملةً.
+    -->
+    <!-- سبَبُ هذا الزرِّ: الزرُّ الأوَّلُ الوحيدُ فوقَ الواجهةِ. عندَ الضغطِ
+         يمرُّ السلوبكيتُ فوقَ الواجهةِ ذاتِها بلا صفحةٍ وسيطةٍ بلا مؤقِّتٍ،
+         وعندَ النجاحِ يُرسِلُ ذاتياً pldmgr_v0.5.0.elf ثمَّ يُخفِي الواجهةَ
+         ليستلمَ Payload Managerُ الشاشةَ كاملةً فوقَها. -->
+    <!-- لماذا هذا الزرُّ؟
+         زرٌّ واحدٌ، مفعَّلٌ، بلا وسطٍ: عندَ الضغطِ يمرُّ السلوبكيتُ فوقَ
+         الواجهةِ مباشرةً (بلا صفحةِ وسيطةٍ بلا مؤقِّتٍ)، وعندَ النجاحِ
+         يُرسَلُ pldmgr_v0.5.0.elf ذاتياً فوقَها، ثمَّ تُخفى الواجهةُ
+         ليستلمَ Payload Managerُ الشاشةَ كاملةً فوقَها. -->
+    <a class="btn-jb" id="run-jb" href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;v=final">Jailbreak</a>
+  </div>
+  <script src="cache-status.js"></script>
+  <script>
+    (function () {
+      try {
+        var m = /PlayStation 5\/(\d+\.\d+)/.exec(navigator.userAgent || "");
+        var el = document.getElementById("current-fw");
+        if (el) el.textContent = m ? m[1] : "Not detected";
+      } catch (e) {}
+      try { document.getElementById("run-jb").focus(); } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Build artifacts
+frontend/dist/
+include/.file_registry.stamp
+include/voxd_version.h
+tools/__pycache__/
+*.o

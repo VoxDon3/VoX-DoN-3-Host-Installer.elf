@@ -1,0 +1,141 @@
+/* VoX DoN 3 Host — main + clean SlopKit background + green log only */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #000;
+  color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ========== PAGE 1 — Landing ========== */
+body.landing { background: #05060a; }
+
+.bg-main {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #05060a url("voxbackground.jpg") center center / cover no-repeat;
+}
+
+.ui {
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1rem 1.5rem;
+}
+
+.top {
+  width: min(92vw, 400px);
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: rgba(8, 12, 22, 0.78);
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  box-shadow: 0 0 22px rgba(0, 180, 255, 0.25);
+}
+
+.top h1 {
+  font-size: 1.45rem;
+  letter-spacing: 0.04em;
+  color: #7df9ff;
+  text-shadow: 0 0 14px rgba(0, 229, 255, 0.85);
+}
+
+.top p {
+  margin-top: 0.3rem;
+  font-size: 0.92rem;
+  color: #aab4c8;
+}
+
+.top span {
+  font-weight: 800;
+  color: #39ff14;
+}
+
+#cache-status {
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  color: #7df9ff;
+}
+
+.mid { flex: 1; width: 100%; }
+
+.btn-jb {
+  display: block;
+  width: min(88vw, 300px);
+  padding: 0.95rem 1.4rem;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 999px;
+  border: 2px solid rgba(160, 210, 255, 0.75);
+  background: linear-gradient(180deg, #5eb0ff 0%, #2b6ef6 50%, #1a4fd4 100%);
+  box-shadow: 0 0 20px rgba(40, 120, 255, 0.55), 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.btn-jb:focus, .btn-jb:hover { outline: none; filter: brightness(1.1); }
+.btn-jb:active { transform: scale(0.97); }
+
+/* ========== PAGE 2 — SlopKit clean BG + green text only ========== */
+body.slop-page {
+  background: #000;
+  position: relative;
+}
+
+.slop-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #000 url("slopkit-bg.jpg") center center / cover no-repeat;
+}
+
+.slop-overlay {
+  position: fixed;
+  z-index: 2;
+  left: 8%;
+  right: 8%;
+  top: 28%;
+  bottom: 12%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 2% 3%;
+}
+
+.slop-log {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: clamp(0.55rem, 2.2vw, 0.95rem);
+  line-height: 1.4;
+  color: #39ff14;
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.45);
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: transparent;
+}
+
+@media (min-width: 700px) {
+  .slop-overlay {
+    left: 12%;
+    right: 18%;
+    top: 26%;
+    bottom: 14%;
+  }
+  .slop-log { font-size: 0.9rem; }
+}
