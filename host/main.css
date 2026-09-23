@@ -87,6 +87,14 @@ body.landing { background: #05060a; }
 .btn-jb:focus, .btn-jb:hover { outline: none; filter: brightness(1.1); }
 .btn-jb:active { transform: scale(0.97); }
 
+/* ========== Inline SlopKit run (landing -> quiet) ========== */
+.jb-wrap { display: none; }
+
+body.quiet .ui,
+body.quiet .bg-main { display: none; }
+
+body.quiet .jb-wrap { display: contents; }
+
 /* ========== PAGE 2 — SlopKit clean BG + green text only ========== */
 body.slop-page {
   background: #000;
@@ -138,4 +146,14 @@ body.slop-page {
     bottom: 14%;
   }
   .slop-log { font-size: 0.9rem; }
+}
+
+/* ========== Inline jailbreak: hide landing chrome, show only the console ========== */
+body.quiet .bg-main,
+body.quiet .ui {
+  display: none;
+}
+
+body.quiet .jb-wrap {
+  display: block;
 }

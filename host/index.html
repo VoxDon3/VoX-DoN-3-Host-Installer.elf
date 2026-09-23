@@ -3,7 +3,8 @@
   لماذا هذه الصفحة؟
   هذه الواجهةُ هي وجهُ الهوستِ الذي يركضُ فوقَ جهازِكَ. الزرُّ فيها
   ليسَ مجرَّدَ رابطٍ: هوَ مفاتيحُ العبورِ فوقَ الجِلدِ.
-  عندَ الضغطِ يجري العملُ ذاتياً فوقَ الواجهةِ نفسِها، وعندَ النجاحِ
+  عندَ الضغطِ يعملُ SlopKitُ فوقَ الواجهةِ نفسِها فوراً (بلا نافذةٍ
+  وسيطةٍ)، فتظهرُ الأرقامُ التسلسليةُ فقط فوقَها، وعندَ النجاحِ
   تُرسَلُ الحمولةُ تلقائياً ثمَّ تُخفى الواجهةُ ليَستلمَ Payload Managerُ الشاشةَ.
 -->
 <html lang="en" manifest="cache.appcache">
@@ -12,9 +13,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>VoX DoN 3 Host</title>
   <link rel="stylesheet" href="main.css">
+  <script>(function () {
+    var pending = [];
+    window.__jbEarly = pending;
+    function raw(tag, text) {
+      var line = "a0-rboot-s" + (pending.length + 1) + "-note-" + tag
+        + "-" + String(text).replace(/[^A-Za-z0-9_.:=,+-]/g, "_").slice(0, 160);
+      pending.push(line);
+      try {
+        var d = document.getElementById("early");
+        if (d) d.textContent += line + "\n";
+      } catch (e) { }
+    }
+    window.__jbRaw = raw;
+    window.alert = function (m) { raw("ALERT-INTERCEPTED", m); };
+    window.confirm = function (m) { raw("CONFIRM-INTERCEPTED", m); return false; };
+    window.addEventListener("error", function (e) {
+      raw("WINDOW-ERROR", (e && e.message) + "@" + (e && e.filename)
+        + ":" + (e && e.lineno));
+    });
+    window.addEventListener("unhandledrejection", function (e) {
+      raw("UNHANDLED-REJECTION",
+        e && e.reason && (e.reason.message || e.reason));
+    });
+  })();
+  </script>
 </head>
 <body class="landing">
   <div class="bg-main"></div>
+
   <div class="ui">
     <header class="top">
       <h1>VoX DoN 3 Host</h1>
@@ -22,25 +49,77 @@
       <p id="cache-status"></p>
     </header>
     <div class="mid"></div>
-    <!--
-        لماذا هذا الزرّ:
-        زرٌّ واحدٌ، مباشرٌ، فوقَ واجهةِ الهوستِ. لا صفحةَ وسيطةٍ، لا مؤقِّتَ،
-        لا progressٍ. عندَ الضغطِ يمرُّ السلوبكيتُ فوقَ الواجهةِ ذاتِها،
-        وعندَ النجاحِ تُرسَلُ الحمولةُ (pldmgr_v0.5.0.elf) ذاتياً فوقَها،
-        ثمَّ تُخفى الواجهةُ ليَستلمَ Payload Managerُ الشاشةَ كاملةً.
-    -->
-    <!-- سبَبُ هذا الزرِّ: الزرُّ الأوَّلُ الوحيدُ فوقَ الواجهةِ. عندَ الضغطِ
-         يمرُّ السلوبكيتُ فوقَ الواجهةِ ذاتِها بلا صفحةٍ وسيطةٍ بلا مؤقِّتٍ،
-         وعندَ النجاحِ يُرسِلُ ذاتياً pldmgr_v0.5.0.elf ثمَّ يُخفِي الواجهةَ
-         ليستلمَ Payload Managerُ الشاشةَ كاملةً فوقَها. -->
     <!-- لماذا هذا الزرُّ؟
-         زرٌّ واحدٌ، مفعَّلٌ، بلا وسطٍ: عندَ الضغطِ يمرُّ السلوبكيتُ فوقَ
-         الواجهةِ مباشرةً (بلا صفحةِ وسيطةٍ بلا مؤقِّتٍ)، وعندَ النجاحِ
-         يُرسَلُ pldmgr_v0.5.0.elf ذاتياً فوقَها، ثمَّ تُخفى الواجهةُ
+         زرٌّ واحدٌ، مفعَّلٌ: عندَ الضغطِ يعملُ SlopKitُ فوقَ الواجهةِ ذاتِها
+         فوراً، فتظهرُ فقط الأرقامُ التسلسليةُ فوقَها بلا نافذةٍ ولا صفحةٍ،
+         وعندَ النجاحِ يُرسَلُ pldmgr_v0.5.0.elf ذاتياً ثمَّ تُخفى الواجهةُ
          ليستلمَ Payload Managerُ الشاشةَ كاملةً فوقَها. -->
-    <a class="btn-jb" id="run-jb" href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;v=final">Jailbreak</a>
+    <a class="btn-jb" id="run-jb" href="#">Jailbreak</a>
   </div>
+
+  <div class="jb-wrap">
+    <div id="slopkitHeader">
+      <h1>PS5 SlopKit Jailbreak (9.00-12.00)</h1>
+      <p>Current firmware: <b id="currentFirmware">detecting...</b></p>
+    </div>
+    <div id="failureMessage">UNLUCKY &mdash; YOU NEED TO REBOOT</div>
+    <div id="cat" style="display:none" aria-hidden="true">
+      <img id="catImage" src="" alt="" style="display:none">
+    </div>
+    <div id="statusBadge" style="display:none;margin:0 auto 12px;padding:14px 18px;max-width:520px;text-align:center;border-radius:12px;font:700 20px/1.3 Arial,sans-serif;"></div>
+    <div id="reboot"></div>
+    <div id="verdict"></div>
+    <div id="danger"></div>
+    <div id="stage">idle</div>
+    <div id="vitals"></div>
+    <div id="cfg"></div>
+    <pre id="early"></pre>
+    <pre id="scr"></pre>
+    <div id="payloadMenu">
+      <div class="payloadHeader">
+        <h2>PS5 SlopKit Payloads (9.00-12.00)</h2>
+        <div class="payloadEyebrow" id="payloadNetworkStatus">Listening on console port 9021</div>
+        <p id="payloadProgress">Select a payload to send it to the ELF loader.</p>
+      </div>
+      <div class="payloadGrid">
+        <a class="payloadTile" href="#" data-name="pldmgr_v0.5.0.elf"><span class="payloadCopy"><strong class="payloadName">Payload Manager</strong><small class="payloadDesc">Full payload manager UI on the console.</small></span><span class="payloadStatus" data-ready="pldmgr_v0.5.0.elf">pldmgr_v0.5.0.elf</span></a>
+        <a class="payloadTile" href="#" data-name="ftpsrv-ps5.elf"><span class="payloadCopy"><strong class="payloadName">ftpsrv</strong><small class="payloadDesc">FTP server. Runs on port 2121.</small></span><span class="payloadStatus" data-ready="ftpsrv-ps5.elf - john-tornblom">ftpsrv-ps5.elf &centerdot; john-tornblom</span></a>
+        <a class="payloadTile" href="#" data-name="gdbsrv-ps5.elf"><span class="payloadCopy"><strong class="payloadName">gdbsrv</strong><small class="payloadDesc">GDB server. Runs on port 2159.</small></span><span class="payloadStatus" data-ready="gdbsrv-ps5.elf - john-tornblom">gdbsrv-ps5.elf &centerdot; john-tornblom</span></a>
+        <a class="payloadTile" href="#" data-name="klogsrv-ps5.elf"><span class="payloadCopy"><strong class="payloadName">klogsrv</strong><small class="payloadDesc">Kernel log server. Runs on port 3232.</small></span><span class="payloadStatus" data-ready="klogsrv-ps5.elf - john-tornblom">klogsrv-ps5.elf &centerdot; john-tornblom</span></a>
+        <a class="payloadTile" href="#" data-name="shsrv-ps5.elf"><span class="payloadCopy"><strong class="payloadName">shsrv</strong><small class="payloadDesc">Telnet shell server. Runs on port 2323.</small></span><span class="payloadStatus" data-ready="shsrv-ps5.elf - john-tornblom">shsrv-ps5.elf &centerdot; john-tornblom</span></a>
+        <a class="payloadTile" href="#" data-name="websrv-ps5.elf"><span class="payloadCopy"><strong class="payloadName">websrv</strong><small class="payloadDesc">Homebrew web server. Runs on port 8080.</small></span><span class="payloadStatus" data-ready="websrv-ps5.elf - john-tornblom">websrv-ps5.elf &centerdot; john-tornblom</span></a>
+        <a class="payloadTile" href="#" data-name="PLK.elf"><span class="payloadCopy"><strong class="payloadName">PLK Manager</strong><small class="payloadDesc">Payload management tools.</small></span><span class="payloadStatus" data-ready="PLK.elf - PLK">PLK.elf &centerdot; PLK</span></a>
+        <a class="payloadTile" href="#" data-name="shadowmountplus.elf"><span class="payloadCopy"><strong class="payloadName">ShadowMountPlus</strong><small class="payloadDesc">Mount and manage game images.</small></span><span class="payloadStatus" data-ready="shadowmountplus.elf - Drakmor">shadowmountplus.elf &centerdot; Drakmor</span></a>
+      </div>
+    </div>
+    <div id="payloadToastContainer"></div>
+    <div id="loaderPrompt">
+      <div class="promptBadge">9021</div>
+      <h2>ELF loader is not running</h2>
+      <p>Port 9021 is not open. Would you like to run the jailbreak now and start the ELF loader?</p>
+      <div class="promptActions">
+        <a id="promptJailbreak" class="promptButton" href="#">Jailbreak</a>
+      </div>
+    </div>
+    <div id="nav"></div>
+    <div id="arm" hidden>Open this page with <b>?go=1</b> to arm it. Nothing runs
+    otherwise.</div>
+    <div id="wrap">
+    <table>
+      <thead><tr><th>#</th><th>test</th><th>st</th><th>result</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    </div>
+    <div id="tally"></div>
+    <div id="summary"></div>
+    <div id="slopkitFooter">slopkit final</div>
+    <div id="console" hidden></div>
+  </div>
+
   <script src="cache-status.js"></script>
+  <script src="slopkit/rop.js?v=final"></script>
+  <script src="slopkit/main.js?v=final"></script>
+  <script src="slopkit/syscalls.js"></script>
   <script>
     (function () {
       try {
@@ -49,6 +128,35 @@
         if (el) el.textContent = m ? m[1] : "Not detected";
       } catch (e) {}
       try { document.getElementById("run-jb").focus(); } catch (e) {}
+
+      var runJB = document.getElementById("run-jb");
+      if (runJB) {
+        runJB.addEventListener("click", function (e) {
+          e.preventDefault();
+          if (!document.getElementById("engine-css")) {
+            var link = document.createElement("link");
+            link.id = "engine-css";
+            link.rel = "stylesheet";
+            link.href = "slopkit/engine.css?v=final";
+            document.head.appendChild(link);
+          }
+          document.body.classList.remove("landing");
+          document.body.classList.add("quiet");
+          window.__JB_QUERY = "go=1&auto=1&production=1&trigger=netcontrol"
+            + "&attempts=8&only=ps0_preflight,ps1_prepare,ps3_stage0,"
+            + "ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,"
+            + "ps10_stage5&log=debug&payload=1&v=final";
+          import("./slopkit/engine.js?v=final").then(function (mod) {
+            return mod.startJB();
+          }).catch(function (err) {
+            var stage = document.getElementById("stage");
+            if (stage) {
+              stage.className = "bad";
+              stage.textContent = "boot failed: " + ((err && err.message) || err);
+            }
+          });
+        });
+      }
     })();
   </script>
 </body>

@@ -227,7 +227,7 @@ async function prepare(p) {
 
     }
 
-    let worker = new Worker("rop_slave.js?v=final");
+    let worker = new Worker(window.__slopkitDir + "rop_slave.js?v=final");
 
     jbmark("PREP-PRE-WORKER-AWAIT", "next=await-wait_for_worker()-first-yield");
     await wait_for_worker();
@@ -339,7 +339,27 @@ async function prepare(p) {
 
     return { p: p2, chain: chain };
 }
+let __mainSrc = (document.currentScript && document.currentScript.src) || "";
+if (typeof window.__slopkitDir === "undefined") {
+    if (__mainSrc) {
+        window.__slopkitDir = __mainSrc.slice(0, __mainSrc.lastIndexOf('/') + 1);
+        window.__appRoot = new URL('../', window.__slopkitDir).href;
+    } else {
+        window.__slopkitDir = "";
+        window.__appRoot = "";
+    }
+}
+
 let fwScript = document.createElement('script');
+fwScript.setAttribute('data-offsets', '1');
+window.offsetsReady = new Promise(function (res, rej) {
+    if (typeof OFFSET_wk_vtable_first_element !== "undefined")
+        return res(fwScript.src);
+    fwScript.addEventListener("load", function () { res(fwScript.src); });
+    fwScript.addEventListener("error", function () {
+        rej(new Error("offsets 404: " + fwScript.src));
+    });
+});
 document.body.appendChild(fwScript);
 
-fwScript.setAttribute('src', `../offsets/${window.fw_str}.js?v=final`);
+fwScript.src = window.__appRoot + "offsets/" + window.fw_str + ".js?v=final";

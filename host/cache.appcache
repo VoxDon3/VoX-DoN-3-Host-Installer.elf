@@ -2,7 +2,7 @@ CACHE MANIFEST
 # VoX-DoN-3 offline cache (light build ~3.3MB)
 # v2: entries match the exact URLs the pages request (with ?v=final)
 # غيّر رقم الإصدار بعد أي تعديل على الملفات
-# version: 2026-09-21-light-v2
+# version: 2026-09-23-inline-v3
 
 CACHE:
 index.html
@@ -11,6 +11,8 @@ cache-status.js
 voxbackground.jpg
 slopkit-bg.jpg
 
+slopkit/engine.js?v=final
+slopkit/engine.css?v=final
 slopkit/poops.html?go=1&auto=1&production=1&trigger=netcontrol&attempts=8&only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&log=debug&payload=1&v=final
 slopkit/poops.html
 slopkit/poops.js?v=final
@@ -21,7 +23,6 @@ slopkit/mem.js?v=final
 slopkit/rop.js?v=final
 slopkit/rop_slave.js?v=final
 slopkit/syscalls.js
-slopkit/vox-slopkit-ui.css
 
 offsets/9.00.js?v=final
 offsets/9.05.js?v=final
