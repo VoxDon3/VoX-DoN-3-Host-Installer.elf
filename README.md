@@ -2,7 +2,7 @@
 
 # 🔊 VoX DoN 3 🔊
 
-<img src="assets/icon0.png" alt="VoX DoN 3 — app icon" width="460"/>
+<img src="assets/pic1.png" alt="VoX DoN 3 — background" width="800"/>
 
 ### `VoX DoN 3.elf` — PS5 all-in-one payload (Host + Installer in one ELF)
 
